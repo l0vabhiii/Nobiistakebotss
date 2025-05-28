@@ -1,0 +1,29 @@
+function checkCode() {
+  const code = document.getElementById('codeInput').value.trim();
+  const msg = document.getElementById('unlockMessage');
+  const whatsapp = document.getElementById('whatsappUnlock');
+
+  const today = new Date();
+  const savedExpiry = localStorage.getItem('bonus_expiry');
+  const expiryDate = savedExpiry ? new Date(savedExpiry) : null;
+
+  // Hidden bypass (owner only, not shown anywhere)
+  const ownerCode = atob("TUlET1dPV05FUg=="); // This is 'MIDOWOWNER' encoded
+
+  if (code === ownerCode) {
+    msg.innerText = "✅ Full Access Granted (Owner)";
+    whatsapp.style.display = "none";
+  } else if (code === "BONUS5DAY") {
+    const expiry = new Date();
+    expiry.setDate(today.getDate() + 5);
+    localStorage.setItem('bonus_expiry', expiry);
+    msg.innerText = "✅ 5 Day Bonus Access Activated!";
+    whatsapp.style.display = "none";
+  } else if (expiryDate && expiryDate > today) {
+    msg.innerText = "✅ You already have bonus access.";
+    whatsapp.style.display = "none";
+  } else {
+    msg.innerText = "❌ Invalid or Expired Code";
+    whatsapp.style.display = "block";
+  }
+}
